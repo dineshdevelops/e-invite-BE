@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/userSchema.model');
-
+const VerfiyToken = require('../../models/verifyToken.model');
+const {sendVerificationEmail} = require("../../controllers/authentication/nodemail.controller")
 const registerUser = asyncHandler(async(req,res)=>{
     const {name,email,password,mobileNumber}=req.body;
     const userExists = await User.findOne({email});
@@ -22,12 +23,13 @@ const registerUser = asyncHandler(async(req,res)=>{
         isVerified:false
     })
     if(user){
-        res.status(200).json({
-            _id:user._id,
-            name:user.name,
-            email:user.email,
+        const token = await new VerfiyToken({
+            userId: user._id,
             token:generateToken(user._id)
-        })
+        }).save();
+        const verifyUrl = `http://localhost:${process.env.port}/api/authentication/${token.userId}/verify/${token.token}`
+        const emailRes = await sendVerificationEmail(user.email,verifyUrl);
+        res.status(200).json({message:"User created Verify",verifyUrl:verifyUrl,emailResponse:emailRes})
     }
     else{
         res.status(400);
@@ -52,6 +54,22 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
 })
 
+const verifyUser = asyncHandler(async(req,res)=>{
+    const {userId,token} = req.params;
+    const user = await User.findOne({_id:userId});
+    const verifyToken = await VerfiyToken.findOne({
+        userId: userId,
+        token:token
+    });
+    // ! If userNot found or token is invalid / expired
+    if(!user || !token){
+        res.status(400).json({message: "Invalid SignUp Link"});
+    }
+    const userRes = await User.updateOne({_id:userId,isVerified:true});
+    await verifyToken.remove();
+    res.status(200).json({message:"User Verified"})
+})
+
 const dummyUser = asyncHandler(async(req,res)=>{
     res.json({message:"SECURE API ACCESS"});
 })
@@ -62,4 +80,4 @@ const generateToken = (id)=>{
     })
 }
 
-module.exports = {registerUser,loginUser,dummyUser}
+module.exports = {registerUser,loginUser,verifyUser,dummyUser}
