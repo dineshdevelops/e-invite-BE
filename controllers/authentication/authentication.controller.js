@@ -18,7 +18,8 @@ const registerUser = asyncHandler(async(req,res)=>{
         name,
         email,
         mobileNumber,
-        password:hashedPassword
+        password:hashedPassword,
+        isVerified:false
     })
     if(user){
         res.status(200).json({
