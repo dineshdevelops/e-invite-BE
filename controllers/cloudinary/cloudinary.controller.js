@@ -7,7 +7,7 @@ const uploadImage = asyncHandler(async(req,res)=>{
     try {
         const imageFile = req.files.photo;
         const result = await cloudinary.uploader.upload(imageFile.tempFilePath,{
-            folder:req.folderName
+            folder:"MarriageInvite"
         })
         res.send(result)
     } catch (error) {
