@@ -17,11 +17,11 @@ module.exports = mailTransporter;
 
 // var mailOptions = {
 //     from: process.env.MAIL_ID,
-//     to:'dineshtech2000@gmail.com',
+//     to:'dhanushme1124@gmail.com',
 //     subject:'DEMO mail',
-//     text:'Demo mail test'
+//     text:''
 // };
-// transporter.sendMail(mailOptions,(error,info)=>{
+// mailTransporter.sendMail(mailOptions,(error,info)=>{
 //     if(error){
 //         console.log(error)
 //     }
