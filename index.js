@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload')
 // *Import Routes
 const authRoutes = require("./routes/authentication.routes")
 const cloudinaryRoutes = require("./routes/cloudinary.routes")
+const weddingRoutes = require("./routes/wedding.routes")
 
 connectDB();
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use(fileUpload({
 // *Connect to Routes
 app.use("/api/authentication",authRoutes);
 app.use("/api/cloudinary",cloudinaryRoutes);
+app.use("/api/wedding",weddingRoutes)
 
 const port = process.env.PORT || 8080;
 app.listen(port,()=>{
