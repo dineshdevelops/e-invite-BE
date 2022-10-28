@@ -29,7 +29,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         }).save();
         const verifyUrl = `http://localhost:${process.env.port}/api/authentication/${token.userId}/verify/${token.token}`
         const emailRes = await sendVerificationEmail(user.email,verifyUrl);
-        res.status(200).json({message:"User created Verify",verifyUrl:verifyUrl,emailResponse:emailRes})
+        res.status(200).json({message:"Verification Email has been sent.Please check your mail box",verifyUrl:verifyUrl,emailResponse:emailRes})
     }
     else{
         res.status(400);
