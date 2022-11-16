@@ -40,6 +40,9 @@ const weddingCreatorSchema = mongoose.Schema({
         groomPhoto:{
             type:String,
             required:[true,'groomPhoto is Required']
+        },
+        groomProfession:{
+            type:String
         }
     },
     brideDetails:{
@@ -54,6 +57,9 @@ const weddingCreatorSchema = mongoose.Schema({
         bridePhoto:{
             type:String,
             required:[true,'BridePhoto is Required']
+        },
+        brideProfession:{
+            type:String
         }
     },
     loveStory:{
@@ -62,6 +68,14 @@ const weddingCreatorSchema = mongoose.Schema({
     },
     gallery:[String],
     events:[eventSchema],
+    contactDetails:{
+        contactName:{
+            type:String
+        },
+        phoneNumber:{
+            type:String
+        }
+    },
     isApproved:{
         type:Boolean,
         default:false

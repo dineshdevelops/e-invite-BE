@@ -2,6 +2,7 @@ const express = require('express');
 const asyncHandler = require('express-async-handler');
 const WeddingCreator = require("../../models/wedding/WeddingCreator.model")
 const {sendWeddingInvitationApproveEmail} = require("../../controllers/authentication/nodemail.controller")
+
 const postCreatorPage = asyncHandler(async(req,res)=>{
     const weddingRes = await WeddingCreator.create(req.body);
     console.log(weddingRes)
