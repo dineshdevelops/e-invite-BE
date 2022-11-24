@@ -30,7 +30,7 @@ const hostSchema = mongoose.Schema({
     hostQualification:{
         type:String
     },
-    hostWork:{
+    hostJob:{
         type:String
     }
 })
