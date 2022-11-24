@@ -41,6 +41,7 @@ const houseWarmingSchema = mongoose.Schema({
     },
     hostDetails:[hostSchema],
     gallery:[String],
+    videoInvite:{type:String},
     events:[eventSchema]
 });
 
