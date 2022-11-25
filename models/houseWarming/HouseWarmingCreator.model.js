@@ -42,7 +42,15 @@ const houseWarmingSchema = mongoose.Schema({
     hostDetails:[hostSchema],
     gallery:[String],
     videoInvite:{type:String},
-    events:[eventSchema]
+    events:[eventSchema],
+    emailId:{
+        type:String,
+        required:[true,"EmailId is required"]
+    },
+    isVerified:{
+        type:Boolean,
+        default:false
+    }
 });
 
 module.exports = mongoose.model('HouseWarmingCreator',houseWarmingSchema)

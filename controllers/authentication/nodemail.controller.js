@@ -14,13 +14,13 @@ const sendVerificationEmail = async(emailId,verifyUrl)=>{
     return emailRes;
 }
 
-const sendWeddingInvitationApproveEmail = async(emailId,invitationUrl)=>{
+const sendInvitationApproveEmail = async(emailId,invitationUrl)=>{
     var mailOptions = {
         from: process.env.MAIL_ID,
         to:emailId,
         subject:'Congrats your Invitation has been approved',
         text:"Verify the email with the below link",
-        html: '<p>Your Wedding Invitation is live! <a href='+invitationUrl +'>'+invitationUrl+'</a></p>'
+        html: '<p>Your Invitation is live! <a href='+invitationUrl +'>'+invitationUrl+'</a></p>'
     
     };
         const emailRes=await sendEmail(mailOptions);
@@ -40,4 +40,4 @@ const sendEmail = async(mailOptions)=>{
 //     }
 // })
 
-module.exports = {sendVerificationEmail,sendWeddingInvitationApproveEmail}
+module.exports = {sendVerificationEmail,sendInvitationApproveEmail}
