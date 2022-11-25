@@ -4,9 +4,11 @@ const asyncHandler = require('express-async-handler');
 const uploader = require("../../middleware/multer.middleware");
 
 const uploadImage = asyncHandler(async(req,res)=>{
+    const emailId = req.body.emailId;
+    const folderName = emailId.split('@')[0];
     try {
         const result = await cloudinary.uploader.upload(req.file.path,{
-            folder:"MarriageInvite"
+            folder:folderName
         })
         res.send(result)
     } catch (error) {
@@ -27,9 +29,10 @@ const deleteImage = asyncHandler(async(req,res)=>{
 
 const uploadVideo = asyncHandler(async(req,res)=>{
     console.log(req.file)
+
     const videoRes = await cloudinary.uploader.upload(req.file.path,{
         resource_type: "video",
-        folder: "video",
+        folder:req.body.userName
       })
     console.log(videoRes)
     res.status(200).json(videoRes);

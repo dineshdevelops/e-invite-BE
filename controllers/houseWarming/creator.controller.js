@@ -3,7 +3,7 @@ const asyncHandler = require('express-async-handler');
 const HouseWarmingCreator = require("../../models/houseWarming/HouseWarmingCreator.model")
 const {generateToken} = require("../authentication/authentication.controller")
 const VerfiyToken = require('../../models/verifyToken.model');
-const {sendVerificationEmail} = require("../../controllers/authentication/nodemail.controller")
+const {sendVerificationEmail,sendInvitationApproveEmail} = require("../../controllers/authentication/nodemail.controller")
 
 const postCreatorPage =asyncHandler(async(req,res)=>{
         const houseWarmingRes = await HouseWarmingCreator.create(req.body);
@@ -41,9 +41,13 @@ const verifyInvitation = asyncHandler(async(req,res)=>{
     }
     //update isVerified
     try {
-        const verifyRes = await HouseWarmingModel.updateOne({_id:invitationId,isVerified:true});
+        const verifyRes = await HouseWarmingCreator.findByIdAndUpdate({_id:invitationId,isVerified:true});
+        console.log(verifyRes)
         await verifyToken.remove()
-        res.status(200).json({message:"User Verified"})
+        const invitationUrl = `http://localhost:${process.env.UI_PORT}/wedding/${invitationId}`;
+        const emailId = verifyRes.emailId;
+        const emailRes = await sendInvitationApproveEmail(emailId,invitationUrl);
+        res.redirect(invitationUrl);
     } catch (error) {
         console.log(error)
         res.status(400).json({message: "Unable to verify User"});
