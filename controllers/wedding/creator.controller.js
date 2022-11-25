@@ -23,10 +23,11 @@ const postCreatorPage = asyncHandler(async(req,res)=>{
 const verifyInvitation = asyncHandler(async(req,res)=>{
     const {invitationId,token} = req.params;
     //Check the token
+    let verifyToken;
     try {
-        const verifyToken = await VerfiyToken.findOne({
-            invitationId: invitationId,
-            token:token
+        verifyToken = await VerfiyToken.findOne({
+        invitationId: invitationId,
+        token:token
         });
         // ! If token is invalid / expired
         if(!verifyToken){
@@ -37,14 +38,15 @@ const verifyInvitation = asyncHandler(async(req,res)=>{
         res.status(400).json({message: "Invalid Link"});
     }
     //update isVerified
-    try {
+    try{
         const verifyRes = await WeddingCreator.updateOne({_id:invitationId,isVerified:true});
         await verifyToken.remove()
         res.status(200).json({message:"User Verified"})
-    } catch (error) {
+    }
+    catch(error){
         console.log(error)
         res.status(400).json({message: "Unable to verify User"});
-    }
+    }    
 })
 
 // const approveWeddingInvitation = asyncHandler(async(req,res)=>{

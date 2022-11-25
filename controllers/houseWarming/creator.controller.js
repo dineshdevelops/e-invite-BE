@@ -24,9 +24,10 @@ const postCreatorPage =asyncHandler(async(req,res)=>{
 
 const verifyInvitation = asyncHandler(async(req,res)=>{
     const {invitationId,token} = req.params;
+    let verifyToken;
     //Check the token
     try {
-        const verifyToken = await VerfiyToken.findOne({
+        verifyToken = await VerfiyToken.findOne({
             invitationId: invitationId,
             token:token
         });

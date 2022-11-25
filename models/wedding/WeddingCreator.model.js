@@ -80,7 +80,7 @@ const weddingCreatorSchema = mongoose.Schema({
         type:String,
         required:[true,'EmailId is Required']
     },
-    isApproved:{
+    isVerified:{
         type:Boolean,
         default:false
     },
