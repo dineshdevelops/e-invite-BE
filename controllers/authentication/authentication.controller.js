@@ -2,8 +2,11 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../../models/userSchema.model');
+const HouseWarmingModel = require("../../models/houseWarming/HouseWarmingCreator.model")
 const VerfiyToken = require('../../models/verifyToken.model');
-const {sendVerificationEmail} = require("../../controllers/authentication/nodemail.controller")
+const {sendVerificationEmail} = require("../../controllers/authentication/nodemail.controller");
+
+
 const registerUser = asyncHandler(async(req,res)=>{
     const {name,email,password,mobileNumber}=req.body;
     const userExists = await User.findOne({email});
@@ -54,20 +57,46 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
 })
 
-const verifyUser = asyncHandler(async(req,res)=>{
-    const {userId,token} = req.params;
-    const user = await User.findOne({_id:userId});
-    const verifyToken = await VerfiyToken.findOne({
-        userId: userId,
-        token:token
-    });
-    // ! If userNot found or token is invalid / expired
-    if(!user || !token){
-        res.status(400).json({message: "Invalid SignUp Link"});
+// const verifyUser = asyncHandler(async(req,res)=>{
+//     const {userId,token} = req.params;
+//     const user = await User.findOne({_id:userId});
+//     const verifyToken = await VerfiyToken.findOne({
+//         userId: userId,
+//         token:token
+//     });
+//     // ! If userNot found or token is invalid / expired
+//     if(!user || !token){
+//         res.status(400).json({message: "Invalid SignUp Link"});
+//     }
+//     const userRes = await User.updateOne({_id:userId,isVerified:true});
+//     await verifyToken.remove();
+//     res.status(200).json({message:"User Verified"})
+// })
+const verifyInvitation = asyncHandler(async(req,res)=>{
+    const {invitationId,token} = req.params;
+    //Check the token
+    try {
+        const verifyToken = await VerfiyToken.findOne({
+            invitationId: invitationId,
+            token:token
+        });
+        // ! If token is invalid / expired
+        if(!verifyToken){
+            res.status(400).json({message: "Invalid Link"});
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({message: "Invalid Link"});
     }
-    const userRes = await User.updateOne({_id:userId,isVerified:true});
-    await verifyToken.remove();
-    res.status(200).json({message:"User Verified"})
+    //update isVerified
+    try {
+        const verifyRes = await HouseWarmingModel.updateOne({_id:invitationId,isVerified:true});
+        await verifyToken.remove()
+        res.status(200).json({message:"User Verified"})
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({message: "Unable to verify User"});
+    }
 })
 
 const dummyUser = asyncHandler(async(req,res)=>{
@@ -80,4 +109,4 @@ const generateToken = (id)=>{
     })
 }
 
-module.exports = {registerUser,loginUser,verifyUser,dummyUser}
+module.exports = {registerUser,loginUser,verifyInvitation,dummyUser,generateToken}

@@ -24,10 +24,10 @@ const eventSchema = mongoose.Schema({
 })
 
 const weddingCreatorSchema = mongoose.Schema({
-    userId:{
-        type:String,
-        required:[true,'UserId is Required']
-    },
+    // userId:{
+    //     type:String,
+    //     required:[true,'UserId is Required']
+    // },
     groomDetails:{
         groomName:{
             type:String,
@@ -75,6 +75,10 @@ const weddingCreatorSchema = mongoose.Schema({
         phoneNumber:{
             type:String
         }
+    },
+    emailId:{
+        type:String,
+        required:[true,'EmailId is Required']
     },
     isApproved:{
         type:Boolean,

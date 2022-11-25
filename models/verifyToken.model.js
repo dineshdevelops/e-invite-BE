@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tokenSchema = new Schema({
-    userId:{
+    invitationId:{
         type:String,
         ref:"Users",
         unique:true,
