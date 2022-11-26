@@ -5,7 +5,6 @@ const {getWeddingInvitation} = require("../controllers/wedding/invitation.contro
 
 router.post("/postCreator",postCreatorPage);
 router.get("/getWeddingInvitation",getWeddingInvitation);
-
 //Verify the invitation
 router.get("/:invitationId/verify/:token",verifyInvitation)
 //! Wedding Invitation API for ALIKA admin
