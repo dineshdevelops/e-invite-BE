@@ -15,7 +15,7 @@ const postCreatorPage = asyncHandler(async(req,res)=>{
         invitationId: invitationId,
         token:generateToken(invitationId)
     }).save();
-    const verifyUrl = `http://localhost:${process.env.port}/api/wedding/${token.invitationId}/verify/${token.token}`
+    const verifyUrl = `${process.env.SERVER_URI}/api/wedding/${token.invitationId}/verify/${token.token}`
     const emailRes = await sendVerificationEmail(emailId,verifyUrl);
     res.status(200).json({message:"Successfully Created your Invitation wait for approval",weddingRes})
 })
@@ -41,7 +41,7 @@ const verifyInvitation = asyncHandler(async(req,res)=>{
     try{
         const verifyRes = await WeddingCreator.findByIdAndUpdate({_id:invitationId,isVerified:true});
         await verifyToken.remove()
-        const invitationUrl = `http://localhost:${process.env.UI_PORT}/wedding/${invitationId}`
+        const invitationUrl = `${process.env.CLIENT_URI}/wedding/${invitationId}`
         const emailId = verifyRes.emailId;
         const emailRes = await sendInvitationApproveEmail(emailId,invitationUrl);
         res.redirect(invitationUrl);

@@ -17,7 +17,7 @@ const postCreatorPage =asyncHandler(async(req,res)=>{
             token:generateToken(invitationId)
         }).save();
         console.log(token)
-        const verifyUrl = `http://localhost:${process.env.port}/api/houseWarming/${token.invitationId}/verify/${token.token}`
+        const verifyUrl = `${process.env.SERVER_URI}/api/houseWarming/${token.invitationId}/verify/${token.token}`
         const emailRes = await sendVerificationEmail(emailId,verifyUrl);
         res.status(200).json({message:"Successfully Created your Invitation wait for approval",houseWarmingRes});    
 });
@@ -44,7 +44,7 @@ const verifyInvitation = asyncHandler(async(req,res)=>{
         const verifyRes = await HouseWarmingCreator.findByIdAndUpdate({_id:invitationId,isVerified:true});
         console.log(verifyRes)
         await verifyToken.remove()
-        const invitationUrl = `http://localhost:${process.env.UI_PORT}/wedding/${invitationId}`;
+        const invitationUrl = `${process.env.CLIENT_URI}/houseWarming/${invitationId}`;
         const emailId = verifyRes.emailId;
         const emailRes = await sendInvitationApproveEmail(emailId,invitationUrl);
         res.redirect(invitationUrl);
